@@ -1,0 +1,9 @@
+while True:
+    accepted={"swindrunner":"1234",'istormrage':'abcd','tpgallywix':'qwerty'}
+    user=input("Input username:")
+    password=input("Input password:")
+    if user in accepted.keys() and accepted[user]==password:
+        print('Correct login!')
+        break
+    else:
+        print('Incorrect login, try again')
