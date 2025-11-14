@@ -1,3 +1,4 @@
+import random
 while True:
     accepted={"swindrunner":"1234",'istormrage':'abcd','tpgallywix':'qwerty'}
     user=input("Input username:")
@@ -7,3 +8,8 @@ while True:
         break
     else:
         print('Incorrect login, try again')
+balance=random.randint(500,2500)
+while True:
+    action=input("Enter number, 1:Display Balance, 2:Withdraw, 3:Deposit, 4:Exit")
+    if action=='1':
+        print('Your balance:'+str(balance))
