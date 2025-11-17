@@ -13,3 +13,26 @@ while True:
     action=input("Enter number, 1:Display Balance, 2:Withdraw, 3:Deposit, 4:Exit")
     if action=='1':
         print('Your balance:'+str(balance))
+        #Assuming the fee applies for the up to -500 rule
+    elif action=='2':
+        num=input('Enter withdraw amount:')
+        num=int(num)
+        if balance-num>0:
+            print("Your new balance is:"+str(balance-num))
+            balance=balance-num
+        elif 0>((balance-num)+(balance-num)*0.2) and -500<((balance-num)+(balance-num)*0.2):
+            choice=input('Are you sure? Balance will be less then zero, resulting in 20 percent fee: Yes/No  ')
+            if choice=="Yes" or choice=='yes' or choice=='y' or choice=='Y':
+                print("Your new balance is:"+str(round((balance-num)+(balance-num)*0.2))+' with the fee amount taken')
+                balance=round((balance-num)+(balance-num)*0.2)
+            elif choice=='No' or choice=='n' or choice=='N' or choice=='no':
+                print('Choose another option.')
+        elif -500>(balance-num)+(balance-num)*0.2:
+            print("Unable to withdraw that much, balance will be over -500")
+    elif action =='3':
+        num2=int(input('How much are you depositing?'))
+        print('Your new balance is:'+str(balance+num2))
+        balance+=num2
+    elif action=='4':
+        print("Thank you for using our bank!")
+        break
