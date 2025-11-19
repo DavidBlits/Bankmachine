@@ -66,18 +66,19 @@ print('''
 #Login loop
 accepted={"swindrunner":"1234",'istormrage':'abcd','tpgallywix':'qwerty'}
 while True:
-    choice=input('Sign up or Sign in:')
-    if choice=='Sign in':
-        user=input("Input username:")
-        password=input("Input password:")
+    choice=input('1:Sign up or 2:Sign in: ')
+    if choice=='2':
+        user=input("Input username: ")
+        password=input("Input password: ")
         if user in accepted.keys() and accepted[user]==password:
             print(f'{GREEN}Correct login!{RESET}')
             break
         else:
             print(f'{RED}Incorrect login, try again{RESET}')
-    elif choice=='Sign up':
+    elif choice=='1':
         name=input('Enter user: ')
         password2=input('Enter password: ')
+        print(f'{GREEN}Added User to database!{RESET}')
         accepted[name]=password2
     else:
         print(f'{RED}Please enter valid input.{RESET}')
@@ -85,36 +86,49 @@ while True:
 tips=['Wait 24 hours before buying impulse items.','Cook at home instead of ordering takeout.','Buy store brands instead of name brands.','Cancel subscriptions you do not use.','Track every dollar you spend this week.']
 balance=random.randint(500,2500)
 while True:
-    action=input(f"Enter number, {BLUE}1:Display Balance{RESET}, {YELLOW}2:Withdraw{RESET}, {CYAN}3:Deposit{RESET}, {RED}4:Exit{RESET}, {MAGENTA}5:Money Tips{RESET}")
+    action=input(f"Enter number: {BLUE}1:Display Balance{RESET}, {YELLOW}2:Withdraw{RESET}, {CYAN}3:Deposit{RESET}, {RED}4:Exit{RESET}, {MAGENTA}5:Money Tips{RESET}: ")
     #show balance
     if action=='1':
         print('Your balance:'+str(balance))
     #Withdraw assuming the fee applies for the up to -500 rule
     elif action=='2':
         try:
-            num=input('Enter withdraw amount:')
+            #Try to catch errors
+            num=input('Enter withdraw amount: ')
             num=int(num)
+            if abs(num)!=num:
+                print(f'{RED}Input only positive number in withdraw.{RESET}')
         except:
             print(f'{RED}Input valid number please.{RESET}')
             continue
-        if abs(num)!=num:
-            print(f'{RED}Input only positive number in withdraw.{RESET}')
-        elif balance-num>=0:
-            print("Your new balance is:"+str(balance-num))
-            balance=balance-num
-        #if balance becomes negative due to withdraw
-        elif 0>(balance-num):
-            if -500<((balance-num)-(num*0.2))<0:
-                choice=input(f'Are you sure? Balance will be less then {RED}zero{RESET}, resulting in 20 percent fee: {GREEN}Yes{RESET}/{RED}No{RESET}  ')
-                if choice=="Yes" or choice=='yes' or choice=='y' or choice=='Y':
-                    print("Your new balance is: "+str(round((balance-num)-(num*0.2)))+' with the fee amount taken')
-                    balance=round((balance-num)-(num*0.2))
-                elif choice=='No' or choice=='n' or choice=='N' or choice=='no':
-                    print('Choose another option.')
-            elif -500>(balance-num)-(num*0.2):
-                print("Unable to withdraw that much, balance will be over -500")
+        #Calculate what balance will be
+        potential_balance = balance-num
+        if potential_balance<0:
+            fee=num*0.2
+            final_result=potential_balance-fee
+            overdraft=True
         else:
-            print(f"{RED}Print a valid input.{RESET}")
+            fee=0
+            final_result=potential_balance
+            overdraft=False
+        #Balance over -500
+        if final_result<-500:
+            print(f"{RED}Unable to withdraw that much, balance will be over -500{RESET}")
+        #Balance negative
+        elif overdraft:
+            print(f"{YELLOW}WARNING: This will result in an overdraft.{RESET}")
+            print('A 20 percent fee of $'+str(fee)+' will be added.')
+            print('Your new balance will be: '+str(final_result))
+            choice= input(f'Do you want to continue? {GREEN}Yes{RESET}/{RED}No{RESET}: ')
+            if choice.lower() in ['yes', 'y']:
+                balance= final_result
+                print('Your new balance is: '+str(balance))
+            else:
+                print(f'{RED}Withdraw cancelled.{RESET}')
+        #Balance positive
+        else:
+            balance=final_result
+            print('Your new balance is: '+str(balance))
     #Deposit
     elif action =='3':
         try:
@@ -122,7 +136,7 @@ while True:
         except:
             print(f'{RED}Input valid number please.{RESET}')
             continue
-        print('Your new balance is:'+str(balance+num2))
+        print('Your new balance is: '+str(balance+num2))
         balance+=num2
     #Exit
     elif action=='4':
