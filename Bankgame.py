@@ -27,9 +27,9 @@ I think this project deserves a level 4+ because I added much more than was need
 of lines
 
  Level 3 Requirements Met:
-• 4 options
-• Overdraw condition
-• Login
+• All level 3 met
+• 
+• 
 • 
 •  
 • 
